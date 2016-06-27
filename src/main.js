@@ -5,6 +5,7 @@ var miner = require('creep/role/miner');
 var pickup = require('creep/role/pickup');
 
 module.exports.loop = function () {
+  console.log('test');
   // Just expose some methods to the console
   Game.public = require('helper/public');
   // Have mine manager update values
