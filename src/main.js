@@ -1,14 +1,14 @@
 var spawner = require('spawner');
-var harvester = require('creep_role_harvester');
-var builder = require('creep_role_builder');
-var miner = require('creep_role_miner');
-var pickup = require('creep_role_pickup');
+var harvester = require('creep/role/harvester');
+var builder = require('creep/role/builder');
+var miner = require('creep/role/miner');
+var pickup = require('creep/role/pickup');
 
 module.exports.loop = function () {
   // Just expose some methods to the console
-  Game.public = require('helper_public');
+  Game.public = require('helper/public');
   // Have mine manager update values
-  require('helper_mine_manager')();
+  require('helper/mine_manager')();
 
   var counts = {};
 

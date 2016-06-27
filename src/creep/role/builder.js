@@ -1,4 +1,4 @@
-var cache = require('helper_cache');
+var cache = require('../../helper/cache');
 
 module.exports = function(creep) {
   if (!creep.memory.status) {

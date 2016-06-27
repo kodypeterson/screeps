@@ -1,6 +1,6 @@
 // TODO: Have the pickup be attached to a miner location
 
-var cache = require('helper_cache');
+var cache = require('../../helper/cache');
 
 module.exports = function (creep) {
   var result;
