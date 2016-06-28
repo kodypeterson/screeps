@@ -62,9 +62,9 @@ module.exports = function (creep) {
           break;
 
         case ERR_INVALID_TARGET:
+          delete creep.memory.target;
           creep.memory.status = 'dropoff';
           dropoff();
-          delete creep.memory.target;
           break;
       }
     }
