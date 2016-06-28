@@ -1,5 +1,3 @@
-// TODO: Have the pickup be attached to a miner location
-
 var cache = require('helper_cache');
 
 module.exports = function (creep) {
@@ -21,12 +19,14 @@ module.exports = function (creep) {
     }
   }
 
-  if (!creep.memory.status) {
-    creep.memory.status = 'pickup';
-  } else if (creep.memory.status === 'pickup') {
-    pickup();
-  } else if (creep.memory.status === 'dropoff') {
-    dropoff();
+  if (creep.memory.miner) {
+    if (!creep.memory.status) {
+      creep.memory.status = 'pickup';
+    } else if (creep.memory.status === 'pickup') {
+      pickup();
+    } else if (creep.memory.status === 'dropoff') {
+      dropoff();
+    }
   }
 
   function dropoff() {
