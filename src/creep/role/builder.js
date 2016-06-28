@@ -12,7 +12,7 @@ module.exports = function(creep) {
   }
 
   function pickup() {
-    if (Memory.haltBuilders) return;
+    if (!canBuild()) return;
 
     var target = Game.spawns.Spawn1;
     var result = target.transferEnergy(creep);
@@ -85,5 +85,17 @@ module.exports = function(creep) {
     cache.set('construction_sites', targetIds);
 
     return targets;
+  }
+
+  function canBuild() {
+    if (Memory.needsSpawn) {
+      return false;
+    }
+
+    if (Memory.repairNowCount > 0) {
+      return false;
+    }
+
+    return true;
   }
 };

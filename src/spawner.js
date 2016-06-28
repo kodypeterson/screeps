@@ -2,27 +2,28 @@ module.exports = function(counts) {
   var maxSpawned = {
     miner: 1,
     pickup: 2,
-    builder: 2
+    builder: 2,
+    healer: 2
   };
-  var needToSpawn = false;
+
+  Memory.needsSpawn = false;
 
   for (var role in maxSpawned) {
     if (counts[role] === undefined || counts[role] < maxSpawned[role]) {
-      needToSpawn = true;
+      Memory.needsSpawn = true;
       spawn(role);
     }
   }
-  Memory.haltBuilders = needToSpawn;
 
   function spawn(role) {
     var attributes = {
       'miner': [WORK, WORK, MOVE],
       'pickup': [CARRY, CARRY, WORK, MOVE, MOVE],
-      'harvester': [CARRY, WORK, MOVE],
-      'builder': [WORK, WORK, MOVE, CARRY]
+      'builder': [WORK, WORK, MOVE, CARRY],
+      'healer': [CARRY, CARRY, WORK, MOVE, CARRY]
     };
 
-    var name = 'Worker' + Math.floor(Math.random() * (1 - 9999999 + 1) + 9999999);
+    var name = role + "_" + Math.floor(Math.random() * (1 - 9999999 + 1) + 9999999);
     var spawn = null;
     for (var i in Game.spawns) {
       var canCreate = Game.spawns[i].canCreateCreep(attributes[role], name);
@@ -37,6 +38,7 @@ module.exports = function(counts) {
       Game.spawns.Spawn1.createCreep(attributes[role], name, {
         role: role
       });
+      Memory.haltBuilders = false;
     }
   }
 };
