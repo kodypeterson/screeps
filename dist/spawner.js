@@ -8,8 +8,7 @@ module.exports = function(counts) {
   var priority = ['miner', 'pickup', 'builder', 'healer'];
 
   priority.forEach(function(role) {
-    if (!Memory.needsSpawn && (counts[role] === undefined || counts[role] < maxSpawned[role])) {
-      Memory.needsSpawn = true;
+    if (counts[role] === undefined || counts[role] < maxSpawned[role]) {
       spawn(role);
     }
   });
@@ -37,8 +36,6 @@ module.exports = function(counts) {
       Game.spawns.Spawn1.createCreep(attributes[role], name, {
         role: role
       });
-      Memory.needsSpawn = false;
-      Memory.haltBuilders = false;
     }
   }
 };
