@@ -9,7 +9,7 @@ module.exports = function(counts) {
   Memory.needsSpawn = false;
 
   priority.forEach(function(role) {
-    if (counts[role] === undefined || counts[role] < maxSpawned[role]) {
+    if (!Memory.needsSpawn && (counts[role] === undefined || counts[role] < maxSpawned[role])) {
       Memory.needsSpawn = true;
       spawn(role);
     }
