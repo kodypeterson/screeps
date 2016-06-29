@@ -72,9 +72,11 @@ module.exports = function (creep) {
 
   function getTarget() {
     var miner = Game.getObjectById(creep.memory.miner);
-    var target = creep.room.lookForAt(LOOK_RESOURCES, miner);
-    if (target && target[0]) {
-      return target[0].id;
+    if (miner) {
+      var target = creep.room.lookForAt(LOOK_RESOURCES, miner);
+      if (target && target[0]) {
+        return target[0].id;
+      }
     }
 
     return undefined;
