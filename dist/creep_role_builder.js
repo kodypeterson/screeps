@@ -14,7 +14,7 @@ module.exports = function(creep) {
   function pickup() {
     if (!canBuild()) return;
 
-    var target = Game.spawns.Spawn1;
+    var target = getPickupTarget();
     var result = target.transferEnergy(creep);
     switch (result) {
       case ERR_NOT_IN_RANGE:
@@ -27,6 +27,19 @@ module.exports = function(creep) {
         building();
         break;
     }
+  }
+
+  function getPickupTarget() {
+    var extensions = creep.room.find(FIND_MY_STRUCTURES, {
+      filter: { structureType: STRUCTURE_EXTENSION }
+    });
+    for (var i in extensions) {
+      var extension = extensions[i];
+      if (extension.energy !== extension.energyCapacity) {
+        return extension;
+      }
+    }
+    return Game.spawns.Spawn1; // TODO: Make this dynamic
   }
 
   function building() {
