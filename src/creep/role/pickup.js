@@ -90,11 +90,13 @@ module.exports = function (creep) {
 
   function getTarget() {
     var miner = Game.getObjectById(creep.memory.miner);
-    if (miner) {
+    if (miner !== null) {
       var target = creep.room.lookForAt(LOOK_RESOURCES, miner);
       if (target && target[0]) {
         return target[0].id;
       }
+    } else {
+      delete creep.memory.miner;
     }
 
     return undefined;
