@@ -30,7 +30,7 @@ module.exports = function (creep) {
   }
 
   function dropoff() {
-    var target = Game.getObjectById(Memory.energyDropoff);
+    var target = Game.getObjectById(getDropOff());
     var result = creep.transfer(target, RESOURCE_ENERGY);
     switch (result) {
       case ERR_NOT_IN_RANGE:
@@ -66,6 +66,24 @@ module.exports = function (creep) {
           creep.memory.status = 'dropoff';
           dropoff();
           break;
+      }
+    }
+  }
+
+  function getDropOff() {
+    for (var i in Game.spawns) {
+      var spawn = Game.spawns[i];
+      if (spawn.energy !== spawn.energyCapacity) {
+        return spawn.id;
+      }
+    }
+    var extensions = creep.room.find(FIND_MY_STRUCTURES, {
+      filter: { structureType: STRUCTURE_EXTENSION }
+    });
+    for (var i in extensions) {
+      var extension = extensions[i];
+      if (extension.energy !== extension.energyCapacity) {
+        return extension.id;
       }
     }
   }

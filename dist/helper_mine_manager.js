@@ -18,15 +18,4 @@ module.exports = function() {
       }
     }
   }
-
-  var found = false;
-  for (var i in Game.spawns) {
-    if (!found) {
-      var spawn = Game.spawns[i];
-      if (spawn.energy !== spawn.energyCapacity) {
-        Memory.energyDropoff = spawn.id;
-        found = true;
-      }
-    }
-  }
 };
