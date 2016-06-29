@@ -34,6 +34,7 @@ module.exports = function (creep) {
         if (!canHeal()) return;
 
         var target = getPickupTarget();
+        if (!target) return;
         var result = target.transferEnergy(creep);
         switch (result) {
             case ERR_NOT_IN_RANGE:
@@ -57,7 +58,6 @@ module.exports = function (creep) {
                 return extension;
             }
         }
-        return Game.spawns.Spawn1; // TODO: Make this dynamic
     }
 
     function repair() {
