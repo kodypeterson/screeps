@@ -35,7 +35,7 @@ module.exports = function(creep) {
     });
     for (var i in extensions) {
       var extension = extensions[i];
-      if (extension.energy !== extension.energyCapacity) {
+      if (extension.energy !== 0) {
         return extension;
       }
     }
