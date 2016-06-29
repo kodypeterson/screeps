@@ -5,15 +5,15 @@ module.exports = function(counts) {
     builder: 2,
     healer: 2
   };
-
+  var priority = ['miner', 'pickup', 'builder', 'healer'];
   Memory.needsSpawn = false;
 
-  for (var role in maxSpawned) {
+  priority.forEach(function(role) {
     if (counts[role] === undefined || counts[role] < maxSpawned[role]) {
       Memory.needsSpawn = true;
       spawn(role);
     }
-  }
+  });
 
   function spawn(role) {
     var attributes = {
