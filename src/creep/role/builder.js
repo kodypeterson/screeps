@@ -105,10 +105,6 @@ module.exports = function(creep) {
       return false;
     }
 
-    if (Memory.repairNowCount > 0) {
-      return false;
-    }
-
     return true;
   }
 };
