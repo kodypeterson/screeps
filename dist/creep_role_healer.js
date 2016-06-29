@@ -31,8 +31,6 @@ module.exports = function (creep) {
     }
 
     function pickup() {
-        if (!canHeal()) return;
-
         var target = getPickupTarget();
         if (!target) return;
         var result = target.transferEnergy(creep);
@@ -111,9 +109,5 @@ module.exports = function (creep) {
         }
 
         return needsRepair;
-    }
-
-    function canHeal() {
-        return !Memory.needsSpawn;
     }
 };

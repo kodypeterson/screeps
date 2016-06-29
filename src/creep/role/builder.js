@@ -12,8 +12,6 @@ module.exports = function(creep) {
   }
 
   function pickup() {
-    if (!canBuild()) return;
-
     var target = getPickupTarget();
     if (!target) return;
     var result = target.transferEnergy(creep);
@@ -98,13 +96,5 @@ module.exports = function(creep) {
     cache.set('construction_sites', targetIds);
 
     return targets;
-  }
-
-  function canBuild() {
-    if (Memory.needsSpawn) {
-      return false;
-    }
-
-    return true;
   }
 };
