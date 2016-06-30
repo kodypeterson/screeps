@@ -116,25 +116,24 @@ module.exports = function(room) {
         room.memory.building = [];
     }
 
+    var building = [];
+    for (var i in Game.creeps) {
+        var activeCreep = Game.creeps[i];
+        if (activeCreep.memory.activeJob) {
+            if (activeCreep.memory.role === 'builder' && activeCreep.memory.activeJob.params.site) {
+                building.push(creep.memory.activeJob.params.site);
+            }
+        }
+    }
+
     var sites = room.find(FIND_CONSTRUCTION_SITES);
     sites.forEach(function(site) {
-        if (!job.exists('build', 'builder', {site: site.id}) && room.memory.building.indexOf(site.id) === -1) {
+        if (!job.exists('build', 'builder', {site: site.id}) && building.indexOf(site.id) === -1) {
             job.create('build', 'builder', 0, {
                 site: site.id
             });
         }
     });
-    for(var ix = room.memory.building.length -1; ix >= 0 ; ix--){
-        var found = false;
-        sites.forEach(function(site) {
-          if (site.id === room.memory.building[ix]) {
-              found = true;
-          }
-        });
-        if (!found) {
-            room.memory.building.splice(ix, 1);
-        }
-    }
 
     room.memory.lastUpdate = Game.time;
 };
