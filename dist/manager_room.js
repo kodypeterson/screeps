@@ -107,7 +107,7 @@ module.exports = function(room) {
                 isFound = true;
             }
         });
-        if (!found) {
+        if (!isFound) {
             room.memory.collecting.splice(i, 1);
         }
     }
