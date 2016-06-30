@@ -53,13 +53,27 @@ module.exports = function(room) {
        }
     });
 
-    if (!room.memory.repairing) {
-        room.memory.repairing = [];
+    var repairing = [];
+    var building = [];
+    var collecting = [];
+    for (var i in Game.creeps) {
+        var activeCreep = Game.creeps[i];
+        if (activeCreep.memory.activeJob) {
+            if (activeCreep.memory.role === 'builder' && activeCreep.memory.activeJob.params.site) {
+                building.push(activeCreep.memory.activeJob.params.site);
+            }
+            if (activeCreep.memory.healer === 'builder' && activeCreep.memory.activeJob.params.structure) {
+                repairing.push(activeCreep.memory.activeJob.params.structure);
+            }
+            if (activeCreep.memory.healer === 'pickup' && activeCreep.memory.activeJob.params.resource) {
+                collecting.push(activeCreep.memory.activeJob.params.resource);
+            }
+        }
     }
 
     var structures = room.find(FIND_STRUCTURES);
     structures.forEach(function(structure) {
-        if (structure.hits !== structure.hitsMax && !job.exists('repair', 'healer', {structure: structure.id}) && room.memory.repairing.indexOf(structure.id) === -1) {
+        if (structure.hits !== structure.hitsMax && !job.exists('repair', 'healer', {structure: structure.id}) && repairing.indexOf(structure.id) === -1) {
             var minHealthNeeded = (50 / 100) * structure.hitsMax;
             var params = {
                 fullRepair: true,
@@ -88,43 +102,14 @@ module.exports = function(room) {
         }
     });
 
-    if (!room.memory.collecting) {
-        room.memory.collecting = [];
-    }
-
     var resources = room.find(FIND_DROPPED_ENERGY);
     resources.forEach(function(resource) {
-        if (!job.exists('pickup', 'pickup', {resource: resource.id}) && room.memory.collecting.indexOf(resource.id) === -1) {
+        if (!job.exists('pickup', 'pickup', {resource: resource.id}) && collecting.indexOf(resource.id) === -1) {
             job.create('pickup', 'pickup', 0, {
                 resource: resource.id
             });
         }
     });
-    for(var i = room.memory.collecting.length -1; i >= 0 ; i--){
-        var isFound = false;
-        resources.forEach(function(resource) {
-            if (resource.id === room.memory.collecting[i]) {
-                isFound = true;
-            }
-        });
-        if (!isFound) {
-            room.memory.collecting.splice(i, 1);
-        }
-    }
-
-    if (!room.memory.building) {
-        room.memory.building = [];
-    }
-
-    var building = [];
-    for (var i in Game.creeps) {
-        var activeCreep = Game.creeps[i];
-        if (activeCreep.memory.activeJob) {
-            if (activeCreep.memory.role === 'builder' && activeCreep.memory.activeJob.params.site) {
-                building.push(creep.memory.activeJob.params.site);
-            }
-        }
-    }
 
     var sites = room.find(FIND_CONSTRUCTION_SITES);
     sites.forEach(function(site) {
