@@ -1,5 +1,3 @@
-var spawner = require('spawner');
-
 module.exports.loop = function () {
   require('manager_memory')();
 
