@@ -21,6 +21,8 @@ module.exports = function(grunt) {
       'creep/role/\' + creep.memory.role': 'creep_role_\' + creep.memory.role'
     };
     files.forEach(function(file) {
+      var parts = file.split('/');
+      replacementMappings['./' + parts[parts.length-1].replace('.js', '')] = file.replace('src/', '').replace(/\//g, '_').replace('.js', '');
       replacementMappings[file.replace('src/', '').replace('.js', '')] = file.replace('src/', '').replace(/\//g, '_').replace('.js', '');
     });
 
