@@ -62,7 +62,7 @@ module.exports = function(name, options) {
                         queue.queue[i].splice(ix, 1);
                     }
                 }
-            } else if(queue.queue[i].id == id){
+            } else if(queue.queue[i] && queue.queue[i].id == id){
                 queue.queue.splice(i, 1);
             }
         }
