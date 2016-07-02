@@ -1,7 +1,4 @@
-module.exports = function(creep) {
-    if (creep.room.memory.repairing.indexOf(creep.memory.activeJob.params.structure) === -1) {
-        creep.room.memory.repairing.push(creep.memory.activeJob.params.structure);
-    }
+module.exports = function(creep, job) {
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
         pickup();
@@ -40,7 +37,7 @@ module.exports = function(creep) {
     }
 
     function repair() {
-        var target = Game.getObjectById(creep.memory.activeJob.params.structure);
+        var target = Game.getObjectById(job.params.structure);
         var result = creep.repair(target);
         switch (result) {
             case ERR_NOT_IN_RANGE:
@@ -55,9 +52,10 @@ module.exports = function(creep) {
 
             case OK:
                 var minHealthNeeded = (50 / 100) * target.hitsMax;
-                if (creep.memory.activeJob.params.fullRepair && target.hits === target.hitsMax ||
-                    !creep.memory.activeJob.params.fullRepair && target.hits >= minHealthNeeded) {
-                    delete creep.memory.activeJob;
+                if (job.params.fullRepair && target.hits === target.hitsMax ||
+                    !job.params.fullRepair && target.hits >= minHealthNeeded) {
+                    var jobManager = require('../manager/job')(creep.room);
+                    jobManager.complete(job, creep);
                 }
                 break;
         }

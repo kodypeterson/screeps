@@ -1,8 +1,4 @@
-module.exports = function(creep, controller) {
-    if (!controller && creep.room.memory.building.indexOf(creep.memory.activeJob.params.site) === -1) {
-        creep.room.memory.building.push(creep.memory.activeJob.params.site);
-    }
-
+module.exports = function(creep, job, controller) {
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
     }
@@ -43,13 +39,11 @@ module.exports = function(creep, controller) {
     }
 
     function building() {
-        var id = controller;
-        if (creep.memory.activeJob) {
-            id = creep.memory.activeJob.params.site;
-        }
+        var id = job.params.site;
         var target = Game.getObjectById(id);
-        if (!target && creep.memory.activeJob) {
-            delete creep.memory.activeJob;
+        if (!target) {
+            var jobManager = require('../manager/job')(creep.room);
+            jobManager.complete(job, creep);
             return;
         }
         if (target.level != undefined) {

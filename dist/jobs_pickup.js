@@ -1,7 +1,4 @@
-module.exports = function(creep) {
-    if (creep.room.memory.collecting.indexOf(creep.memory.activeJob.params.resource) === -1) {
-        creep.room.memory.collecting.push(creep.memory.activeJob.params.resource);
-    }
+module.exports = function(creep, job) {
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
     } else if (creep.memory.status === 'pickup') {
@@ -25,7 +22,7 @@ module.exports = function(creep) {
     }
 
     function pickup() {
-        var target = Game.getObjectById(creep.memory.activeJob.params.resource);
+        var target = Game.getObjectById(job.params.resource);
         var result = creep.pickup(target);
         switch (result) {
             case ERR_NOT_IN_RANGE:
@@ -38,7 +35,8 @@ module.exports = function(creep) {
                 break;
 
             case ERR_INVALID_TARGET:
-                delete creep.memory.activeJob;
+                var jobManager = require('manager_job')(creep.room);
+                jobManager.complete(job, creep);
                 creep.memory.status = 'dropoff';
                 dropoff();
                 break;

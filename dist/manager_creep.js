@@ -14,24 +14,20 @@ module.exports = function(room) {
             if ((creep.ticksToLive <= ((creep.body.length+1) * 3)) && !creep.memory.spawnQueued) {
                 // This creep will die soon
                 creep.say("Bye World!");
-                queue.push('spawn', 0, {
-                    role: creep.memory.role,
-                    room: room.name
-                });
-                creep.memory.spawnQueued = true;
+                if (!creep.memory.temporary) {
+                    queue.push('spawn', 0, {
+                        role: creep.memory.role,
+                        room: room.name
+                    });
+                    creep.memory.spawnQueued = true;
+                }
             }
 
-            if (!creep.memory.activeJob) {
-                var jobs = require('manager_job')(room);
-                jobs.assign(creep);
+            var jobs = require('manager_job')(room);
+            var job = jobs.getJob(creep);
+            if (job) {
+                require('jobs_' + jobs.Jobs.list[job].name)(creep, jobs.Jobs.list[job]);
             }
-            if (creep.memory.activeJob) {
-                require('jobs_' + creep.memory.activeJob.name)(creep);
-            } else if (creep.memory.role === 'builder') {
-                require('jobs_build')(creep, room.controller.id);
-            }
-
-            //require('creep_role_' + creep.memory.role)(creep);
         }
     }
 

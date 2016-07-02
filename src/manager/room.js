@@ -6,13 +6,14 @@ module.exports = function(room) {
     }
 
     var job = require('./job')(room);
+    var Queue = require('../helper/queue');
+    var creepQueue = new Queue('creep', {
+        priority: true,
+        room: room
+    });
+    job.cleanup();
     if (room.memory.emptyRoom && !room.memory.spawnedEmptyRoom) {
         // The room is empty - Spawn initial stuff
-        var Queue = require('../helper/queue');
-        var queue = new Queue('creep', {
-            priority: true,
-            room: room
-        });
 
         var needQueue = [
             {role: 'miner', priority: 0},
@@ -25,33 +26,13 @@ module.exports = function(room) {
         ];
 
         needQueue.forEach(function(item) {
-            queue.push('spawn', item.priority, {
+            creepQueue.push('spawn', item.priority, {
                 role: item.role,
                 room: room.name
             });
         });
         room.memory.spawnedEmptyRoom = true;
     }
-
-    if (!room.memory.sources) {
-        var sources = room.find(FIND_SOURCES);
-        room.memory.sources = [];
-        sources.forEach(function(source) {
-            room.memory.sources.push({
-                id: source.id
-            });
-        });
-    }
-    room.memory.sources.forEach(function(source, idx) {
-       if (!source.miner && !job.exists('mine', 'miner', {source: source.id})) {
-           job.create('mine', 'miner', 0, {
-               source: source.id,
-               index: idx
-           });
-       } else if (source.miner && !Game.creeps[source.miner]) {
-           delete source.miner;
-       }
-    });
 
     var repairing = [];
     var building = [];
@@ -71,14 +52,23 @@ module.exports = function(room) {
         }
     }
 
+    var sources = room.find(FIND_SOURCES);
+    sources.forEach(function(source) {
+        if (!job.exists('mine', 'miner', {source: source.id})) {
+            job.create('mine', 'miner', 0, {
+                source: source.id
+            });
+        }
+    });
     var structures = room.find(FIND_STRUCTURES);
     structures.forEach(function(structure) {
-        if (structure.hits !== structure.hitsMax && !job.exists('repair', 'healer', {structure: structure.id}) && repairing.indexOf(structure.id) === -1) {
-            var minHealthNeeded = (50 / 100) * structure.hitsMax;
+        if (!job.exists('repair', 'healer', {structure: structure.id})) {
             var params = {
                 fullRepair: true,
-                structure: structure.id
+                structure: structure.id,
+                neededCreeps: 2 //make dynamic
             };
+            var minHealthNeeded = (50 / 100) * structure.hitsMax;
             if (structure.hits < minHealthNeeded) {
                 params.fullRepair = false;
             }
@@ -104,7 +94,7 @@ module.exports = function(room) {
 
     var resources = room.find(FIND_DROPPED_ENERGY);
     resources.forEach(function(resource) {
-        if (!job.exists('pickup', 'pickup', {resource: resource.id}) && collecting.indexOf(resource.id) === -1) {
+        if (!job.exists('pickup', 'pickup', {resource: resource.id})) {
             job.create('pickup', 'pickup', 0, {
                 resource: resource.id
             });
@@ -113,12 +103,66 @@ module.exports = function(room) {
 
     var sites = room.find(FIND_CONSTRUCTION_SITES);
     sites.forEach(function(site) {
-        if (!job.exists('build', 'builder', {site: site.id}) && building.indexOf(site.id) === -1) {
+        if (!job.exists('build', 'builder', {site: site.id})) {
             job.create('build', 'builder', 0, {
-                site: site.id
+                site: site.id,
+                neededCreeps: 99 //make this dynamic
             });
         }
     });
+    if (!job.exists('build', 'builder', {site: room.controller.id})) {
+        job.create('build', 'builder', 100, {
+            site: room.controller.id,
+            neededCreeps: 99
+        });
+    }
+
+
+    var queueItems = creepQueue.items();
+    var neededCreeps = {};
+    var creepCount = {};
+    var creepsInQueue = {};
+
+    for (var id in Game.creeps) {
+        var creep = Game.creeps[id];
+        if (!creepCount[creep.memory.role]) creepCount[creep.memory.role] = 0;
+        creepCount[creep.memory.role]++;
+    }
+    queueItems.forEach(function(item) {
+        if (!creepsInQueue[item.params.role]) creepsInQueue[item.params.role] = 0;
+        creepsInQueue[item.params.role]++;
+    });
+
+    for (var i in job.Jobs.list) {
+        var j = job.Jobs.list[i];
+        if (!neededCreeps[j.role]) neededCreeps[j.role] = 0;
+        if (j.params.neededCreeps !== 99) {
+            neededCreeps[j.role] += j.params.neededCreeps;
+        } else {
+            neededCreeps[j.role]++;
+        }
+    }
+
+    for (var role in neededCreeps) {
+        if (!creepCount[role]) creepCount[role] = 0;
+        if (!creepsInQueue[role]) creepsInQueue[role] = 0;
+        var need = neededCreeps[role] - creepCount[role];
+        need -= creepsInQueue[role];
+        if (need > 0) {
+            var c = 0;
+            while (c !== need) {
+                // TODO: Ensure there is enough energy to queue this up
+                //creepQueue.push('spawn', 1, {
+                //    role: role,
+                //    room: room.name,
+                //    memory: {
+                //        temporary: true
+                //    }
+                //});
+                c++;
+            }
+        }
+    }
 
     room.memory.lastUpdate = Game.time;
 };

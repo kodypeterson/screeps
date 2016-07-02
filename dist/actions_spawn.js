@@ -11,9 +11,10 @@ module.exports = function(params) {
         var spawn = Game.spawns[i];
         if (spawn.room.name === params.room) {
             if (spawn.canCreateCreep(attributes[params.role], name) === OK) {
-                spawn.createCreep(attributes[params.role], name, {
-                    role: params.role
-                });
+                if (!params.memory) params.memory = {};
+                params.memory.role = params.role;
+
+                spawn.createCreep(attributes[params.role], name, params.memory);
 
                 return true;
             }
