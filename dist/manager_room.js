@@ -12,6 +12,7 @@ module.exports = function(room) {
         room: room
     });
     job.cleanup();
+    if (!room.memory.towerMemory) room.memory.towerMemory = {};
     if (room.memory.emptyRoom && !room.memory.spawnedEmptyRoom) {
         // The room is empty - Spawn initial stuff
 

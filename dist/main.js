@@ -3,6 +3,7 @@ module.exports.loop = function () {
 
   for (var room in Game.rooms) {
     require('manager_room')(Game.rooms[room]);
+    require('manager_tower')(Game.rooms[room]);
     require('manager_creep')(Game.rooms[room]);
   }
 };

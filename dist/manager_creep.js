@@ -9,6 +9,9 @@ module.exports = function(room) {
     for (var i in Game.creeps) {
         var creep = Game.creeps[i];
         if (creep.room.name === room.name) {
+            creep.moveToHolding = function() {
+                this.moveTo(Game.flags['HOLDING_' + this.room.name]);
+            };
             // This is my creep to manage
             creepCount++;
             if ((creep.ticksToLive <= ((creep.body.length+1) * 3)) && !creep.memory.spawnQueued) {

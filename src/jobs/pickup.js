@@ -8,15 +8,26 @@ module.exports = function(creep, job) {
     }
 
     function dropoff() {
-        var target = Game.getObjectById(getDropOff());
+        if (!creep.memory.dropoff) {
+            creep.memory.dropoff = getDropOff();
+        }
+        var target = Game.getObjectById(creep.memory.dropoff);
         var result = creep.transfer(target, RESOURCE_ENERGY);
         switch (result) {
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target);
                 break;
             case ERR_NOT_ENOUGH_RESOURCES:
+                var pickupTarget = Game.getObjectById(job.params.resource);
+                if (!pickupTarget) {
+                    var jobManager = require('../manager/job')(creep.room);
+                    jobManager.complete(job, creep);
+                }
                 creep.memory.status = 'pickup';
-                pickup();
+                delete creep.memory.dropoff;
+                break;
+            case ERR_FULL:
+                delete creep.memory.dropoff;
                 break;
         }
     }
@@ -35,8 +46,6 @@ module.exports = function(creep, job) {
                 break;
 
             case ERR_INVALID_TARGET:
-                var jobManager = require('../manager/job')(creep.room);
-                jobManager.complete(job, creep);
                 creep.memory.status = 'dropoff';
                 dropoff();
                 break;
@@ -50,6 +59,7 @@ module.exports = function(creep, job) {
                 return spawn.id;
             }
         }
+        //TODO: Make the below cached
         var extensions = creep.room.find(FIND_MY_STRUCTURES, {
             filter: { structureType: STRUCTURE_EXTENSION }
         });
@@ -57,6 +67,24 @@ module.exports = function(creep, job) {
             var extension = extensions[i];
             if (extension.energy !== extension.energyCapacity) {
                 return extension.id;
+            }
+        }
+        var towers = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_TOWER }
+        });
+        for (var i in towers) {
+            var tower = towers[i];
+            if (tower.energy !== tower.energyCapacity) {
+                return tower.id;
+            }
+        }
+        var containers = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_CONTAINER }
+        });
+        for (var i in containers) {
+            var container = containers[i];
+            if (container.energy !== container.energyCapacity) {
+                return container.id;
             }
         }
     }

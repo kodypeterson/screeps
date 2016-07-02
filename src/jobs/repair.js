@@ -1,4 +1,7 @@
 module.exports = function(creep, job) {
+    if (creep.memory.isTower) {
+        creep.memory.status = 'repair';
+    }
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
         pickup();
@@ -25,14 +28,18 @@ module.exports = function(creep, job) {
     }
 
     function getPickupTarget() {
-        var extensions = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_EXTENSION }
+        var containers = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_CONTAINER }
         });
-        for (var i in extensions) {
-            var extension = extensions[i];
-            if (extension.energy !== 0) {
-                return extension;
+        for (var i in containers) {
+            var container = containers[i];
+            if (container.energy !== 0) {
+                return container;
             }
+        }
+
+        if (!creep.memory.isTower) {
+            creep.moveToHolding();
         }
     }
 

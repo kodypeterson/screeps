@@ -11,7 +11,9 @@ module.exports = function(room) {
     function cleanup() {
         for (var i in Jobs.creepJobMap) {
             if (!Game.creeps[i]) {
-                Jobs.list[Jobs.creepJobMap[i]].creeps = _.pull(Jobs.list[Jobs.creepJobMap[i]].creeps, i);
+                if (Jobs.list[Jobs.creepJobMap[i]]) {
+                    Jobs.list[Jobs.creepJobMap[i]].creeps = _.pull(Jobs.list[Jobs.creepJobMap[i]].creeps, i);
+                }
                 delete Jobs.creepJobMap[i];
             }
         }
