@@ -28,18 +28,13 @@ module.exports = function(creep, job) {
     }
 
     function getPickupTarget() {
-        var containers = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_CONTAINER }
-        });
-        for (var i in containers) {
-            var container = containers[i];
-            if (container.energy !== 0) {
-                return container;
-            }
-        }
+        var energy = require('../manager/energy')(creep.room);
+        var target = energy.pickup(false);
 
-        if (!creep.memory.isTower) {
+        if (!target && creep.moveToHolding) {
             creep.moveToHolding();
+        } else {
+            return target;
         }
     }
 

@@ -29,53 +29,16 @@ module.exports = function(creep, job, controller) {
     }
 
     function getPickupTarget() {
-        var containers = Cache.get(creep.room, 'structures')[STRUCTURE_CONTAINER];
-        if (containers) {
-            for (var i = 0;i < containers.length;i++) {
-                var container = Game.getObjectById(containers[i]);
-                if (container.energy !== 0) {
-                    return container;
-                }
-            }
-        }
+        var energy = require('manager_energy')(creep.room);
         var id = job.params.site;
-        var target = Game.getObjectById(id);
-        if (target && target.level) {
-            // This is a job for leveling controller
-            // Do not pull from extensions just for this
-            return creep.moveToHolding();
-        }
-        var extensions = Cache.get(creep.room, 'structures')[STRUCTURE_EXTENSION];
-        if (extensions) {
-            for (var i = 0;i < extensions.length;i++) {
-                var extension = Game.getObjectById(extensions[i]);
-                if (extension.energy !== 0) {
-                    return extension;
-                }
-            }
-            // We have extensions but they are empty
-            // Don't pull from spawn then
-            return creep.moveToHolding();
-        }
-        var Queue = require('helper_queue');
-        var creepQueue = new Queue('creep', {
-            priority: true,
-            room: creep.room
-        });
-        if (creepQueue.items().length > 0) {
-            return creep.moveToHolding();
-        }
-        var spawns = Cache.get(creep.room, 'structures')[STRUCTURE_SPAWN];
-        if (spawns) {
-            for (var i = 0;i < spawns.length;i++) {
-                var spawn = Game.getObjectById(spawns[i]);
-                if (spawn.energy !== 0) {
-                    return spawn;
-                }
-            }
-        }
+        var buildTarget = Game.getObjectById(id);
+        var target = energy.pickup(true, typeof buildTarget.level !== 'undefined');
 
-        creep.moveToHolding();
+        if (!target) {
+            creep.moveToHolding();
+        } else {
+            return target;
+        }
     }
 
     function building() {

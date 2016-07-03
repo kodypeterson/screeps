@@ -8,10 +8,8 @@ module.exports = function(creep, job) {
     }
 
     function dropoff() {
-        if (!creep.memory.dropoff) {
-            creep.memory.dropoff = getDropOff();
-        }
-        var target = Game.getObjectById(creep.memory.dropoff);
+        var energy = require('manager_energy')(creep.room);
+        var target = energy.dropOff();
         var result = creep.transfer(target, RESOURCE_ENERGY);
         switch (result) {
             case ERR_NOT_IN_RANGE:
@@ -49,43 +47,6 @@ module.exports = function(creep, job) {
                 creep.memory.status = 'dropoff';
                 dropoff();
                 break;
-        }
-    }
-
-    function getDropOff() {
-        for (var i in Game.spawns) {
-            var spawn = Game.spawns[i];
-            if (spawn.energy !== spawn.energyCapacity && spawn.room.name === creep.room.name) {
-                return spawn.id;
-            }
-        }
-        //TODO: Make the below cached
-        var extensions = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_EXTENSION }
-        });
-        for (var i in extensions) {
-            var extension = extensions[i];
-            if (extension.energy !== extension.energyCapacity) {
-                return extension.id;
-            }
-        }
-        var towers = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_TOWER }
-        });
-        for (var i in towers) {
-            var tower = towers[i];
-            if (tower.energy !== tower.energyCapacity) {
-                return tower.id;
-            }
-        }
-        var containers = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_CONTAINER }
-        });
-        for (var i in containers) {
-            var container = containers[i];
-            if (container.energy !== container.energyCapacity) {
-                return container.id;
-            }
         }
     }
 };
