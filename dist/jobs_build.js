@@ -37,6 +37,13 @@ module.exports = function(creep, job, controller) {
         var energy = require('manager_energy')(creep.room);
         var id = job.params.site;
         var buildTarget = Game.getObjectById(id);
+        if (!buildTarget) {
+            var jobManager = require('manager_job')(creep.room);
+            // a construction was complete, refresh the cache
+            require('helper_refreshStructureCache');
+            jobManager.complete(job, creep);
+            return;
+        }
         var target = energy.pickup(true, typeof buildTarget.level !== 'undefined');
 
         if (!target) {
@@ -52,7 +59,7 @@ module.exports = function(creep, job, controller) {
         if (!target) {
             var jobManager = require('manager_job')(creep.room);
             // a construction was complete, refresh the cache
-            creep.room.refreshStructureCache();
+            require('helper_refreshStructureCache');
             jobManager.complete(job, creep);
             return;
         }

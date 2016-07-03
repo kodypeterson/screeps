@@ -36,18 +36,6 @@ module.exports = function(room) {
         room.memory.spawnedEmptyRoom = true;
     }
 
-    room.refreshStructureCache = function() {
-        Cache.invalidate(room, 'towers');
-        Cache.invalidate(room, 'structures');
-        var structures = room.find(FIND_STRUCTURES);
-        var cacheStruct = {};
-        structures.forEach(function (structure) {
-            if (!cacheStruct[structure.structureType]) cacheStruct[structure.structureType] = [];
-            cacheStruct[structure.structureType].push(structure.id);
-        });
-        Cache.set(room, 'structures', cacheStruct, -1);
-    };
-
     var repairing = [];
     var building = [];
     var collecting = [];
@@ -75,7 +63,7 @@ module.exports = function(room) {
         }
     });
     if (!Cache.get(room, 'structures')) {
-        room.refreshStructureCache();
+        require('../helper/refreshStructureCache');
     }
     var structures = room.find(FIND_STRUCTURES); //TODO: use cache
     structures.forEach(function(structure) {
