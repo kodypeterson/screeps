@@ -7,7 +7,8 @@ module.exports = function(params) {
         'healer': [CARRY, CARRY, WORK, MOVE, MOVE]
     };
     var Cache = require('../helper/cache');
-    var extensions = Cache.get(Game.rooms[params.room], 'structures')[STRUCTURE_EXTENSION];
+    var structures = Cache.get(Game.rooms[params.room], 'structures') || {};
+    var extensions = structures[STRUCTURE_EXTENSION];
     if (extensions) {
         var count = extensions.length;
         var roomHasPickup = false;

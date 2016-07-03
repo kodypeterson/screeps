@@ -30,6 +30,8 @@ module.exports = function(room) {
             var job = jobs.getJob(creep);
             if (job) {
                 require('jobs_' + jobs.Jobs.list[job].name)(creep, jobs.Jobs.list[job]);
+            } else {
+                creep.moveToHolding();
             }
         }
     }

@@ -14,7 +14,12 @@ module.exports = function(creep, job) {
     function pickup() {
         var target = getPickupTarget();
         if (!target) return;
-        var result = target.transferEnergy(creep);
+        var result;
+        if (target.transfer) {
+            result = target.transfer(creep, RESOURCE_ENERGY);
+        } else {
+            result = target.transferEnergy(creep);
+        }
         switch (result) {
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target);

@@ -14,7 +14,12 @@ module.exports = function(creep, job, controller) {
     function pickup() {
         var target = getPickupTarget();
         if (!target) return;
-        var result = target.transferEnergy(creep);
+        var result;
+        if (target.transfer) {
+            result = target.transfer(creep, RESOURCE_ENERGY);
+        } else {
+            result = target.transferEnergy(creep);
+        }
         switch (result) {
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target);
@@ -47,7 +52,7 @@ module.exports = function(creep, job, controller) {
         if (!target) {
             var jobManager = require('../manager/job')(creep.room);
             // a construction was complete, refresh the cache
-            refreshStructureCache();
+            creep.room.refreshStructureCache();
             jobManager.complete(job, creep);
             return;
         }
@@ -76,17 +81,5 @@ module.exports = function(creep, job, controller) {
                     break;
             }
         }
-    }
-
-    function refreshStructureCache() {
-        Cache.invalidate(creep.room, 'towers');
-        Cache.invalidate(creep.room, 'structures');
-        var structures = creep.room.find(FIND_MY_STRUCTURES);
-        var cacheStruct = {};
-        structures.forEach(function (structure) {
-            if (!cacheStruct[structure.structureType]) cacheStruct[structure.structureType] = [];
-            cacheStruct[structure.structureType].push(structure.id);
-        });
-        Cache.set(creep.room, 'structures', cacheStruct, -1);
     }
 };

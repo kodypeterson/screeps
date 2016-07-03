@@ -8,7 +8,8 @@ module.exports = function(room) {
             }
         }
 
-        var extensions = Cache.get(room, 'structures')[STRUCTURE_EXTENSION];
+        var structures = Cache.get(room, 'structures') || {};
+        var extensions = structures[STRUCTURE_EXTENSION];
         if (extensions) {
             for (var i = 0; i < extensions.length; i++) {
                 var extension = Game.getObjectById(extensions[i]);
@@ -18,7 +19,7 @@ module.exports = function(room) {
             }
         }
 
-        var towers = Cache.get(room, 'structures')[STRUCTURE_TOWER];
+        var towers = structures[STRUCTURE_TOWER];
         if (towers) {
             for (var i = 0; i < towers.length; i++) {
                 var tower = Game.getObjectById(towers[i]);
@@ -28,11 +29,11 @@ module.exports = function(room) {
             }
         }
 
-        var containers = Cache.get(room, 'structures')[STRUCTURE_CONTAINER];
+        var containers = structures[STRUCTURE_CONTAINER];
         if (containers) {
             for (var i = 0; i < containers.length; i++) {
                 var container = Game.getObjectById(containers[i]);
-                if (container.energy !== container.energyCapacity) {
+                if (_.sum(container.store) !== container.storeCapacity) {
                     return container;
                 }
             }
@@ -40,11 +41,12 @@ module.exports = function(room) {
     }
 
     function pickup(isBuilder, isForController) {
-        var containers = Cache.get(room, 'structures')[STRUCTURE_CONTAINER];
+        var structures = Cache.get(room, 'structures') || {};
+        var containers = structures[STRUCTURE_CONTAINER];
         if (containers) {
             for (var i = 0;i < containers.length;i++) {
                 var container = Game.getObjectById(containers[i]);
-                if (container.energy !== 0) {
+                if (container.store[RESOURCE_ENERGY] && container.store[RESOURCE_ENERGY] !== 0) {
                     return container;
                 }
             }
@@ -67,7 +69,7 @@ module.exports = function(room) {
             return;
         }
 
-        var extensions = Cache.get(room, 'structures')[STRUCTURE_EXTENSION];
+        var extensions = structures[STRUCTURE_EXTENSION];
         if (extensions) {
             for (var i = 0;i < extensions.length;i++) {
                 var extension = Game.getObjectById(extensions[i]);
@@ -79,7 +81,7 @@ module.exports = function(room) {
             // Don't pull from spawn then
             return;
         }
-        var spawns = Cache.get(room, 'structures')[STRUCTURE_SPAWN];
+        var spawns = structures[STRUCTURE_SPAWN];
         if (spawns) {
             for (var i = 0;i < spawns.length;i++) {
                 var spawn = Game.getObjectById(spawns[i]);

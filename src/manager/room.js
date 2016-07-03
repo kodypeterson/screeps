@@ -5,6 +5,7 @@ module.exports = function(room) {
         return;
     }
 
+    var Cache = require('../helper/cache');
     var job = require('./job')(room);
     var Queue = require('../helper/queue');
     var creepQueue = new Queue('creep', {
@@ -15,7 +16,7 @@ module.exports = function(room) {
     if (!room.memory.towerMemory) room.memory.towerMemory = {};
     if (room.memory.emptyRoom && !room.memory.spawnedEmptyRoom) {
         // The room is empty - Spawn initial stuff
-
+        // TODO: Make this more dynamic
         var needQueue = [
             {role: 'miner', priority: 0},
             {role: 'pickup', priority: 1},
@@ -34,6 +35,18 @@ module.exports = function(room) {
         });
         room.memory.spawnedEmptyRoom = true;
     }
+
+    room.refreshStructureCache = function() {
+        Cache.invalidate(room, 'towers');
+        Cache.invalidate(room, 'structures');
+        var structures = room.find(FIND_STRUCTURES);
+        var cacheStruct = {};
+        structures.forEach(function (structure) {
+            if (!cacheStruct[structure.structureType]) cacheStruct[structure.structureType] = [];
+            cacheStruct[structure.structureType].push(structure.id);
+        });
+        Cache.set(room, 'structures', cacheStruct, -1);
+    };
 
     var repairing = [];
     var building = [];
@@ -61,9 +74,12 @@ module.exports = function(room) {
             });
         }
     });
-    var structures = room.find(FIND_STRUCTURES);
+    if (!Cache.get(room, 'structures')) {
+        room.refreshStructureCache();
+    }
+    var structures = room.find(FIND_STRUCTURES); //TODO: use cache
     structures.forEach(function(structure) {
-        if (!job.exists('repair', 'healer', {structure: structure.id})) {
+        if (!job.exists('repair', 'healer', {structure: structure.id}) && structure.hits !== structure.hitsMax) {
             var params = {
                 fullRepair: true,
                 structure: structure.id,
