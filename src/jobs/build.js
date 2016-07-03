@@ -1,8 +1,6 @@
-module.exports = function(creep, controller) {
-    if (!controller && creep.room.memory.building.indexOf(creep.memory.activeJob.params.site) === -1) {
-        creep.room.memory.building.push(creep.memory.activeJob.params.site);
-    }
+var Cache = require('../helper/cache');
 
+module.exports = function(creep, job, controller) {
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
     }
@@ -16,7 +14,12 @@ module.exports = function(creep, controller) {
     function pickup() {
         var target = getPickupTarget();
         if (!target) return;
-        var result = target.transferEnergy(creep);
+        var result;
+        if (target.transfer) {
+            result = target.transfer(creep, RESOURCE_ENERGY);
+        } else {
+            result = target.transferEnergy(creep);
+        }
         switch (result) {
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target);
@@ -31,25 +34,26 @@ module.exports = function(creep, controller) {
     }
 
     function getPickupTarget() {
-        var extensions = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_EXTENSION }
-        });
-        for (var i in extensions) {
-            var extension = extensions[i];
-            if (extension.energy !== 0) {
-                return extension;
-            }
+        var energy = require('../manager/energy')(creep.room);
+        var id = job.params.site;
+        var buildTarget = Game.getObjectById(id);
+        var target = energy.pickup(true, typeof buildTarget.level !== 'undefined');
+
+        if (!target) {
+            creep.moveToHolding();
+        } else {
+            return target;
         }
     }
 
     function building() {
-        var id = controller;
-        if (creep.memory.activeJob) {
-            id = creep.memory.activeJob.params.site;
-        }
+        var id = job.params.site;
         var target = Game.getObjectById(id);
-        if (!target && creep.memory.activeJob) {
-            delete creep.memory.activeJob;
+        if (!target) {
+            var jobManager = require('../manager/job')(creep.room);
+            // a construction was complete, refresh the cache
+            creep.room.refreshStructureCache();
+            jobManager.complete(job, creep);
             return;
         }
         if (target.level != undefined) {
