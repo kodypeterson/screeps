@@ -18,13 +18,15 @@ module.exports = function(params) {
                 roomHasPickup = true;
             }
         }
-        if (!roomHasPickup) {
+        if (roomHasPickup) {
             extensions.forEach(function(extension) {
                 var ext = Game.getObjectById(extension);
                 if (ext.energy !== ext.energyCapacity) {
                     count--;
                 }
             });
+        } else {
+            count = 0;
         }
         switch (count) {
             case 4:
