@@ -40,7 +40,7 @@ module.exports = function(creep, job, controller) {
         if (!buildTarget) {
             var jobManager = require('../manager/job')(creep.room);
             // a construction was complete, refresh the cache
-            require('../helper/refreshStructureCache')(room);
+            require('../helper/refreshStructureCache')(creep.room);
             jobManager.complete(job, creep);
             return;
         }
