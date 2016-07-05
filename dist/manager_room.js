@@ -63,7 +63,7 @@ module.exports = function(room) {
         }
     });
     if (!Cache.get(room, 'structures')) {
-        require('helper_refreshStructureCache');
+        require('helper_refreshStructureCache')(room);
     }
     var structures = room.find(FIND_STRUCTURES); //TODO: use cache
     structures.forEach(function(structure) {
