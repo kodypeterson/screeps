@@ -1,7 +1,7 @@
 module.exports = function(room) {
     // Update/Instruct every x ticks
     var ticksToWait = 30;
-    if (room.memory.lastUpdate && (Game.time - room.memory.lastUpdate) < ticksToWait) {
+    if (room.memory.lastUpdate && !room.memory.refreshStructures && (Game.time - room.memory.lastUpdate) < ticksToWait) {
         return;
     }
 
@@ -62,7 +62,8 @@ module.exports = function(room) {
             });
         }
     });
-    if (!Cache.get(room, 'structures')) {
+    if (!Cache.get(room, 'structures') || room.memory.refreshStructures) {
+        delete room.memory.refreshStructures;
         require('helper_refreshStructureCache')(room);
     }
     var structures = room.find(FIND_STRUCTURES); //TODO: use cache
