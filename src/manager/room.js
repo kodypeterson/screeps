@@ -1,7 +1,7 @@
 module.exports = function(room) {
     // Update/Instruct every x ticks
     var ticksToWait = 30;
-    if (room.memory.lastUpdate && (Game.time - room.memory.lastUpdate) < ticksToWait) {
+    if (room.memory.lastUpdate && !room.memory.refreshStructures && (Game.time - room.memory.lastUpdate) < ticksToWait) {
         return;
     }
 
