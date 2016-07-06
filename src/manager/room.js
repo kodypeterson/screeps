@@ -62,7 +62,8 @@ module.exports = function(room) {
             });
         }
     });
-    if (!Cache.get(room, 'structures')) {
+    if (!Cache.get(room, 'structures') || room.memory.refreshStructures) {
+        delete room.memory.refreshStructures;
         require('../helper/refreshStructureCache')(room);
     }
     var structures = room.find(FIND_STRUCTURES); //TODO: use cache
