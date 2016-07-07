@@ -13,7 +13,9 @@ module.exports = function(room) {
         if (extensions) {
             for (var i = 0; i < extensions.length; i++) {
                 var extension = Game.getObjectById(extensions[i]);
-                if (extension.energy !== extension.energyCapacity) {
+                if (!extension) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (extension.energy !== extension.energyCapacity) {
                     return extension;
                 }
             }
@@ -23,7 +25,9 @@ module.exports = function(room) {
         if (towers) {
             for (var i = 0; i < towers.length; i++) {
                 var tower = Game.getObjectById(towers[i]);
-                if (tower.energy !== tower.energyCapacity) {
+                if (!tower) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (tower.energy !== tower.energyCapacity) {
                     return tower;
                 }
             }
@@ -33,7 +37,9 @@ module.exports = function(room) {
         if (containers) {
             for (var i = 0; i < containers.length; i++) {
                 var container = Game.getObjectById(containers[i]);
-                if (_.sum(container.store) !== container.storeCapacity) {
+                if (!container) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (_.sum(container.store) !== container.storeCapacity) {
                     return container;
                 }
             }
@@ -46,7 +52,9 @@ module.exports = function(room) {
         if (containers) {
             for (var i = 0;i < containers.length;i++) {
                 var container = Game.getObjectById(containers[i]);
-                if (container.store[RESOURCE_ENERGY] && container.store[RESOURCE_ENERGY] !== 0) {
+                if (!container) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (container.store[RESOURCE_ENERGY] && container.store[RESOURCE_ENERGY] !== 0) {
                     return container;
                 }
             }
@@ -73,7 +81,9 @@ module.exports = function(room) {
         if (extensions) {
             for (var i = 0;i < extensions.length;i++) {
                 var extension = Game.getObjectById(extensions[i]);
-                if (extension.energy !== 0) {
+                if (!extension) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (extension.energy !== 0) {
                     return extension;
                 }
             }
