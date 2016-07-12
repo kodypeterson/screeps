@@ -9,7 +9,7 @@ module.exports = function(creep, job) {
     } else if(creep.memory.status === 'pickup') {
         pickup();
     } else {
-        var sites = _.values(Cache.get(room, 'sites') || {});
+        var sites = _.values(Cache.get(creep.room, 'sites') || {});
         if (sites.length > 0) {
             // We have construction sites that need to be built
             // Don't repair anything
