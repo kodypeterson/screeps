@@ -9,8 +9,10 @@ module.exports = function(room) {
     var Jobs = room.memory.jobs;
 
     function cleanup() {
+        var Cache = require('helper_cache');
+        var structures = _.values(Cache.get(room, 'structures') || {});
         for (var i in Jobs.creepJobMap) {
-            if (!Game.creeps[i]) {
+            if (!Game.creeps[i] && !structures[i]) {
                 if (Jobs.list[Jobs.creepJobMap[i]]) {
                     Jobs.list[Jobs.creepJobMap[i]].creeps = _.pull(Jobs.list[Jobs.creepJobMap[i]].creeps, i);
                 }
@@ -43,8 +45,9 @@ module.exports = function(room) {
     }
 
     function getJob(creep) {
-        if (Jobs.creepJobMap[creep.id] && Jobs.list[Jobs.creepJobMap[creep.id]]) {
-            return Jobs.list[Jobs.creepJobMap[creep.id]].id;
+        var id = creep.name || creep.id;
+        if (Jobs.creepJobMap[id] && Jobs.list[Jobs.creepJobMap[id]]) {
+            return Jobs.list[Jobs.creepJobMap[id]].id;
         }
 
         return assign(creep);
@@ -55,10 +58,11 @@ module.exports = function(room) {
         var selectedJob;
         if (priorityJobs && priorityJobs[0]) {
             _.forEach(priorityJobs, function(value) {
+                var id = creep.name || creep.id;
                 if (!Jobs.list[value.id].creeps || Jobs.list[value.id].creeps.length !== value.params.neededCreeps) {
                     Jobs.list[value.id].creeps = Jobs.list[value.id].creeps || [];
-                    Jobs.list[value.id].creeps.push(creep.id);
-                    Jobs.creepJobMap[creep.id] = value.id;
+                    Jobs.list[value.id].creeps.push(id);
+                    Jobs.creepJobMap[id] = value.id;
                     selectedJob = value.id;
 
                     return false;

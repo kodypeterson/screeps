@@ -17,7 +17,9 @@ module.exports = function(room) {
     if (room.memory.emptyRoom && !room.memory.spawnedEmptyRoom) {
         // The room is empty - Spawn initial stuff
         // TODO: Make this more dynamic
+        console.log('Room is empty - Spawning!');
         var needQueue = [
+            {role: 'miner', priority: 0},
             {role: 'miner', priority: 0},
             {role: 'pickup', priority: 1},
             {role: 'pickup', priority: 1},
