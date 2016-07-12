@@ -47,10 +47,43 @@ module.exports = function(room) {
     function getJob(creep) {
         var id = creep.name || creep.id;
         if (Jobs.creepJobMap[id] && Jobs.list[Jobs.creepJobMap[id]]) {
-            return Jobs.list[Jobs.creepJobMap[id]].id;
+            var job = Jobs.list[Jobs.creepJobMap[id]]
+            if (job.isIdleJob) {
+                var jobId = _getJob(creep);
+                if (!Jobs.list[jobId].isIdleJob) {
+                    return _assign(creep, jobId);
+                }
+            }
+            return job.id;
         }
 
         return assign(creep);
+    }
+
+    function _getJob(creep) {
+        var priorityJobs = _.filter(_.compact(_.flattenDeep(Jobs.priorityQueue)), {role: creep.memory.role});
+        var selectedJob;
+        if (priorityJobs && priorityJobs[0]) {
+            _.forEach(priorityJobs, function(value) {
+                var id = creep.name || creep.id;
+                if (!Jobs.list[value.id].creeps || Jobs.list[value.id].creeps.length !== value.params.neededCreeps) {
+                    selectedJob = value.id;
+
+                    return false;
+                }
+            });
+        }
+
+        return selectedJob;
+    }
+
+    function _assign(creep, jobId) {
+        var id = creep.name || creep.id;
+        Jobs.list[jobId].creeps = Jobs.list[jobId].creeps || [];
+        Jobs.list[jobId].creeps.push(id);
+        Jobs.creepJobMap[id] = jobId;
+
+        return jobId
     }
 
     function assign(creep) {
@@ -60,9 +93,7 @@ module.exports = function(room) {
             _.forEach(priorityJobs, function(value) {
                 var id = creep.name || creep.id;
                 if (!Jobs.list[value.id].creeps || Jobs.list[value.id].creeps.length !== value.params.neededCreeps) {
-                    Jobs.list[value.id].creeps = Jobs.list[value.id].creeps || [];
-                    Jobs.list[value.id].creeps.push(id);
-                    Jobs.creepJobMap[id] = value.id;
+                    _assign(creep, value.id);
                     selectedJob = value.id;
 
                     return false;
