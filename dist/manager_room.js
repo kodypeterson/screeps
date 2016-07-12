@@ -121,6 +121,7 @@ module.exports = function(room) {
     if (!job.exists('build', 'builder', {site: room.controller.id})) {
         job.create('build', 'builder', 100, {
             site: room.controller.id,
+            isIdleJob: true,
             neededCreeps: 99
         });
     }

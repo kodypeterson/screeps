@@ -10,4 +10,12 @@ module.exports = function(room) {
         cacheStruct[structure.structureType].push(structure.id);
     });
     Cache.set(room, 'structures', cacheStruct, -1);
+
+    var sites = room.find(FIND_CONSTRUCTION_SITES);
+    var cacheSites = {};
+    sites.forEach(function(site) {
+        if (!cacheSites[site.structureType]) cacheSites[site.structureType] = [];
+        cacheSites[site.structureType].push(site.id);
+    });
+    Cache.set(room, 'sites', cacheSites, -1);
 };
