@@ -1,4 +1,5 @@
 module.exports = function(creep, job) {
+    var Cache = require('../helper/cache');
     if (creep.memory.isTower) {
         creep.memory.status = 'repair';
     }
