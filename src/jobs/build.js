@@ -4,6 +4,7 @@ module.exports = function(creep, job, controller) {
     if (!creep.memory.status) {
         creep.memory.status = 'pickup';
     }
+    creep.memory.holdStatus = false;
 
     if (creep.memory.status === 'pickup') {
         pickup();
@@ -47,6 +48,7 @@ module.exports = function(creep, job, controller) {
         var target = energy.pickup(true, typeof buildTarget.level !== 'undefined');
 
         if (!target) {
+            creep.memory.holdStatus = 'Waiting on pickup target';
             creep.moveToHolding();
         } else {
             return target;
