@@ -15,6 +15,7 @@ module.exports = function(creep, job) {
             // Don't repair anything
             // TODO: Make this dynamic based on energy in storage
             creep.memory.holdStatus = 'Waiting on construction build';
+            creep.moveToHolding();
             return;
         }
         creep.memory.holdStatus = false;
