@@ -25,6 +25,9 @@ module.exports = function(room) {
                     creep.memory.spawnQueued = true;
                 }
             }
+            if (!creep.memory.id) {
+                creep.memory.id = creep.id;
+            }
 
             var jobs = require('./job')(room);
             var job = jobs.getJob(creep);
