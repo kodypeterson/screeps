@@ -44,10 +44,34 @@ module.exports = function(room) {
                 }
             }
         }
+
+        var storages = structures[STRUCTURE_STORAGE];
+        if (storages) {
+            for (var i = 0; i < storages.length; i++) {
+                var storage = Game.getObjectById(storages[i]);
+                if (!storage) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (_.sum(storage.store) !== storage.storeCapacity) {
+                    return storage;
+                }
+            }
+        }
     }
 
     function pickup(isBuilder, isForController) {
         var structures = Cache.get(room, 'structures') || {};
+        var storages = structures[STRUCTURE_STORAGE];
+        if (storages) {
+            for (var i = 0; i < storages.length; i++) {
+                var storage = Game.getObjectById(storages[i]);
+                if (!storage) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (_.sum(storage.store) !== storage.storeCapacity) {
+                    return storage;
+                }
+            }
+        }
+
         var containers = structures[STRUCTURE_CONTAINER];
         if (containers) {
             for (var i = 0;i < containers.length;i++) {

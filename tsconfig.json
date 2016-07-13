@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "target": "ES5",
+        "allowJs": true,
+        "sourceMap": true
+    },
+    "filesGlob": [
+        "typings/index.d.ts",
+        "node_modules/angular2/*.ts",
+        "!node_modules/angular2/alt_router.d.ts",
+        "web/public/**/*.module.ts",
+        "web/public/**/*.ts"
+    ],
+    "files": [
+        "typings/index.d.ts",
+        "web/public/app/features/core/core.module.ts",
+        "web/public/app/features/dashboard/dashboard.module.ts",
+        "web/public/app/features/loading/loading.module.ts",
+        "web/public/app/screeps.module.ts",
+        "web/public/app/features/core/api.service.ts",
+        "web/public/app/features/dashboard/dashboard.controller.ts",
+        "web/public/app/features/dashboard/dashboard.route.ts",
+        "web/public/app/features/loading/loading.controller.ts",
+        "web/public/app/features/loading/loading.route.ts"
+    ]
+}
