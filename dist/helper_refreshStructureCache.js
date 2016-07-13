@@ -19,4 +19,6 @@ module.exports = function(room) {
         cacheSites[site.structureType].push(site.id);
     });
     Cache.set(room, 'sites', cacheSites, -1);
+
+    room.memory.lastStructureRefresh = Game.time;
 };
