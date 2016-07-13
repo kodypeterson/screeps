@@ -60,7 +60,8 @@ module.exports = function(creep, job) {
     function repair() {
         var target = Game.getObjectById(job.params.structure);
         if (!target) {
-            console.log('d');
+            var jobManager = require('../manager/job')(creep.room);
+            return jobManager.complete(job, creep);
         }
         var result = creep.repair(target);
         switch (result) {
