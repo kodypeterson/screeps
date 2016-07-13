@@ -3,6 +3,7 @@ var Cache = require('../helper/cache');
 module.exports = function(room) {
     Cache.invalidate(room, 'towers');
     Cache.invalidate(room, 'structures');
+    Cache.invalidate(room, 'sites');
     var structures = room.find(FIND_STRUCTURES);
     var cacheStruct = {};
     structures.forEach(function (structure) {

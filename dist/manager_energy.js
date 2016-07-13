@@ -66,7 +66,7 @@ module.exports = function(room) {
                 var storage = Game.getObjectById(storages[i]);
                 if (!storage) {
                     require('helper_refreshStructureCache')(room);
-                } else if (_.sum(storage.store) !== storage.storeCapacity) {
+                } else if (storage.store[RESOURCE_ENERGY] && storage.store[RESOURCE_ENERGY] !== 0) {
                     return storage;
                 }
             }
