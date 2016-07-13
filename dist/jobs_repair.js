@@ -59,6 +59,9 @@ module.exports = function(creep, job) {
 
     function repair() {
         var target = Game.getObjectById(job.params.structure);
+        if (!target) {
+            console.log('d');
+        }
         var result = creep.repair(target);
         switch (result) {
             case ERR_NOT_IN_RANGE:
