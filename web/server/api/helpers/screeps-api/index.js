@@ -1,9 +1,10 @@
 module.exports = function() {
   var Promise = require("bluebird");
   var request = Promise.promisifyAll(require("request"));
+  var screepsP = require("screeps-p");
   var prefix = 'https://screeps.com/api/';
-  var username = '';
-  var password = '';
+  var username = screepsP.screeps.username;
+  var password = screepsP.screeps.password;
   var token = null;
 
   function makeRequest(method, endpoint, params) {

@@ -19,7 +19,8 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "express": "^4.14.0",
-    "request": "^2.73.0"
+    "request": "^2.73.0",
+    "screeps-p": "git@gitlab.com:kodypeterson/screeps-private.git"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
