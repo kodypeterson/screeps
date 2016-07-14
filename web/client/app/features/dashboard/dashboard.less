@@ -1,0 +1,67 @@
+.status-bulb {
+  width: 15px;
+  height: 15px;
+  float: left;
+  border-radius: 8px;
+  margin-right: 8px;
+  margin-top: 5px;
+  text-align: center;
+  padding-top: 3.5px;
+
+  i {
+    font-size: 8px;
+    color: white;
+    display: inherit;
+  }
+
+  &.active {
+    background-color: #0F7F12;
+    .pulse
+  }
+
+  &.waiting {
+    background-color: #FDA428;
+  }
+
+  &.inactive {
+    background-color: #FC0D1B;
+  }
+}
+
+.storage-table {
+  .storage {
+    height: 200px;
+    border: 1px solid grey;
+    background-color: #ffa0a5;
+    position: relative;
+
+    .level {
+      background-color: white;
+    }
+
+    .inventory {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          .type {
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            display: inline-block;
+
+            &.energy {
+              background-color: #FFE56D;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

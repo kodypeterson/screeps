@@ -1,0 +1,476 @@
+// Custom Vars
+@mission-control-light: #A498BB; // light purple
+@mission-control-dark: #3D344E; // dark purple
+
+// Replacement colors
+//@success: #6ABD7A;
+@success: #5CB88A; // more of a teal-ish that goes well with purple
+@warning: #E4BB59;
+@danger: #EF5555;
+
+// Color overrides
+.text-success {
+  color: @success;
+}
+
+.text-danger {
+  color: @danger;
+}
+
+.text-warning {
+  color: #BB9657;
+}
+
+.text-muted {
+  //color: rgba(0, 0, 0, 0.36);
+  color: rgba(105, 85, 144, 0.54)
+}
+
+.help-block {
+  color: #958AAB;
+}
+
+code {
+  color: #349BAF;
+  background-color: #DDF1F5;
+}
+
+.monospace {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 85%;
+}
+
+.form-control {
+  background: #FBFBFB;
+  &:focus {
+    border-color: #685B82;
+    box-shadow: inset 0 1px 1px rgba(164, 177, 168, 0.075);
+    background: #fff;
+  }
+}
+
+textarea {
+  max-width: 100%;
+}
+
+.btn-default {
+  color: #3D344E;
+  background-color: #FCFAFF;
+  border-color: #C5BDD4;
+  &:hover {
+    background-color: darken(#FCFAFF, 2%);
+    border-color: darken(#C5BDD4, 4%);
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #3D344E;
+  border-color: #3D344E;
+  &:hover {
+    background-color: lighten(#3D344E, 4%);
+    border-color: lighten(#3D344E, 4%);
+  }
+
+}
+
+.btn-success {
+  background-color: @success;
+  border-color: @success;
+  &:hover {
+    background-color: lighten(@success, 4%);
+    border-color: lighten(@success, 4%);
+  }
+}
+
+.btn-warning {
+  background-color: @warning;
+  border-color: @warning;
+  &:hover {
+    background-color: darken(@warning, 2%);
+    border-color: darken(@warning, 4%);
+  }
+
+}
+
+a, a:active, a:visited, a:hover {
+  cursor: pointer;
+  color: #675884;
+}
+
+// Nav overrides
+.navbar-inverse {
+  background: @mission-control-dark;
+  border-color: @mission-control-dark;
+}
+
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-nav > li > a:focus, .navbar-inverse .navbar-nav > li > a:hover {
+  //text-transform: uppercase;
+  //font-size: 12px;
+  //font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros", TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
+  color: @mission-control-light;
+  font-size: 15px;
+
+  i {
+    color: #675C7B;
+    font-size: 14px;
+
+    @media screen and (max-width: 990px) {
+      display: none;
+    }
+
+    // For this icon, it looks better without font-smoothing on in chrome
+    &.fa-alt-list {
+      -webkit-font-smoothing: none;
+    }
+  }
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+  //background-color: #332C40;
+  background-color: transparent;
+  color: #fff;
+  -webkit-font-smoothing: auto;
+  //font-weight: bold;
+
+  i {
+    color: white;
+  }
+}
+
+// Navbar logo
+.navbar-inverse .navbar-brand {
+  display: inline-block;
+  border-radius: 50%;
+  //border: solid 2px #69499a;
+  border: solid 2px @mission-control-light;
+  width: 30px;
+  padding: 3px 7px;
+  height: 30px;
+  margin-top: 10px;
+  font-size: 14px;
+  //color: #69499a;
+  color: @mission-control-light;
+  font-weight: bold;
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
+.navbar-inverse .navbar-brand:hover {
+  //background-color: #ffedd4;
+  color: white;
+  border-color: white;
+}
+
+// Basic typography overrides
+h1, h2, h3, h4, h5 {
+  //color: rgb(85, 85, 85);
+  color: #543F7D;
+}
+
+// sub-heading for h4 in job execution view
+.sub-heading {
+  font-weight: normal;
+  color: #B7ACCA;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+// Always show the scrollbar (to avoid content jumping back and forth)
+html {
+  overflow-y:scroll;
+}
+
+body {
+  font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros", TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
+  //font-size: 14px;
+  line-height: 1.42857143;
+  //color: #333;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  color: #514765; // shade of @mission-control-dark
+}
+
+pre {
+  background-color: #F4EFFF;
+  border-color: #D7D3E0;
+  color: #3D344E;
+}
+
+// pre in table cell fix
+td pre {
+  white-space: pre-wrap;
+}
+
+tr.off-white {
+  background-color: rgb(249, 247, 253); // used for tr in job logs table
+}
+
+// table row line colors
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  border-color: #E2DEEA;
+}
+
+
+// Panel overrides
+.panel-default, .panel-default .panel-heading {
+  //border-color: #ACA1BF;
+  border-color: #C5BDD4;
+}
+
+.panel-default {
+
+  .panel-heading {
+    //background-color: #E8E2F3;
+    background-color: #EEE9F7;
+    color: #3D344E;
+  }
+}
+
+
+
+
+
+// Job Steps
+
+.pipeline-stage {
+  .title-block {
+    padding: 14px 12px 12px 11px;
+    line-height: 1;
+
+    // All three types of icons: image, icon, icon_stack
+    img.icon, span.icon, i.icon {
+      cursor: move;
+      width: 40px;
+      float: left;
+      margin-right: 8px;
+    }
+
+    // Single Icon
+    i.icon {
+      font-size: 42px;
+    }
+
+    //// Icon stack
+    //span.icon {
+    //    .icon-bg {
+    //        color: @mission-control-dark;
+    //    }
+    //
+    //    .icon-mg { /*<i class="fa fa-globe fa-stack-2x icon-mg"></i>*/
+    //        color: rgba(255, 255, 255, 0.2);
+    //    }
+    //
+    //    .icon-fg {
+    //        color: white;
+    //    }
+    //}
+    .edit-stage-name {
+      padding: 0 20px 5px 5px;
+      input[type="text"] {
+
+      }
+    }
+    a.configure {
+      float: right;
+    }
+
+    h3 {
+      margin-bottom: 0;
+      margin-top: 0;
+      a {
+        display:none;
+      }
+      &:hover {
+        a {
+          display:inline;
+        }
+      }
+    }
+
+    small {
+      padding-left: 2px;
+      vertical-align: 1px;
+    }
+  }
+
+  .panel-body {
+    display: none; // hide until opened
+    background: #F8F6FD;
+    border-top: solid 1px #C5BDD4;
+    padding: 15px 15px 13px 15px;
+
+    .row {
+      &:nth-child(n+2) {
+        margin-top: 12px;
+        border-top: solid 1px #E1DBEC;
+        padding-top: 15px;
+      }
+
+      h4 {
+        margin-top: 0;
+        margin-bottom: 3px;
+      }
+
+      p {
+        font-size: 13px;
+        margin-bottom: 0px;
+      }
+
+    }
+
+  }
+}
+
+.add-stage-divider {
+  position: relative;
+  height: 32px;
+  margin-top: -20px;
+  padding-top: 0;
+
+  hr {
+    border-top: none;
+    border-bottom: solid 1px #EEEAF1;
+    margin: 0;
+    padding-top: 16px;
+  }
+  a {
+    display: inline-block;
+    position: absolute;
+    width: 136px;
+    background: #fff;
+    color: #D5CDDA;
+    top: 6px;
+    left: 40%;
+    font-size: 14px;
+
+    i {}
+
+    span {
+      display:none;
+    }
+
+    &:hover {
+      color: #675884;
+      text-decoration: none;
+    }
+  }
+  &:hover a span {
+    display: inline;
+  }
+}
+
+.list-group-item .fa-chevron-right {
+  font-size: 12px;
+  color: #CFCAD8;
+  padding-top: 6px;
+  margin-right: -1px;
+}
+
+// Shell output styling
+
+pre.shell-output {
+  -webkit-font-smoothing: subpixel-antialiased;
+  //background: #252525;
+  //color: #B5B3B3;
+  background: #2D263A; // dark-gray with a hint of mission-control-dark (purple)
+  color: #BEB3D2; // light-gray with a hint of mission-control-light (purple)
+
+  .black { color: #5F5757; }
+  .red { color: #FF2F2F; }
+  .green { color: #0DA00D; }
+  .bright-green { color: #2DF10E; }
+  .yellow { color: #D8CD28; }
+  .blue { color: #1C98F7; }
+  .purple { color: #B65FE0; }
+  .cyan { color: #27CDD0; }
+  .white { color: #FFFFFF; }
+
+
+  /*
+  '[1;30m' => '<span class="black">',
+  '[1;31m' => '<span class="red">',
+  '[0;32m' => '<span class="bright-green">',
+  '[1;32m' => '<span class="green">',
+  '[1;33m' => '<span class="yellow">',
+  '[1;34m' => '<span class="blue">',
+  '[1;35m' => '<span class="purple">',
+  '[1;36m' => '<span class="cyan">',
+  '[1;37m' => '<span class="white">',
+  */
+
+}
+
+#login {
+  display: none;
+  background: @mission-control-dark;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  //opacity: 0;
+  //transition: opacity 300ms ease-out;
+  padding-top: 100px;
+
+  label {
+    color: @mission-control-light;
+  }
+}
+
+
+@-webkit-keyframes pulsate {
+  0% {opacity: 0.6;}
+  50% {opacity: 1.0;}
+  100% {opacity: 0.6;}
+}
+
+.pulse {
+  -webkit-animation: pulsate 1000ms linear;
+  -webkit-animation-iteration-count: infinite;
+  opacity: 0.6;
+}
+
+table.stage-bar {
+  width: 100%;
+  margin-top: 10px;
+
+  tr {
+    td {
+      background: #eee;
+      border: solid 2px white;
+      border-top: none;
+      border-bottom: none;
+      line-height: 14px;
+
+      &:first-child {
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px !important;
+        border-left: none;
+      }
+
+      &:last-child {
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px !important;
+        border-right: none;
+      }
+
+      &.successful {
+        background-color: #7DCE7D;
+      }
+
+      &.running {
+        background-color: #469EBB;
+      }
+    }
+  }
+}
+
+.log-details {
+  background: #F8F6FD;
+  display: none;
+}
+
+@import "features/dashboard/dashboard";
