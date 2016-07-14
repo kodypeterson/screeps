@@ -1,17 +1,17 @@
 .status-bulb {
   width: 15px;
   height: 15px;
-  float: left;
   border-radius: 8px;
-  margin-right: 8px;
-  margin-top: 5px;
   text-align: center;
-  padding-top: 3.5px;
+  padding-top: 3px;
+  display: inline-block;
+  vertical-align: text-top;
 
   i {
     font-size: 8px;
     color: white;
     display: inherit;
+    vertical-align: top;
   }
 
   &.active {
@@ -65,3 +65,33 @@
   }
 }
 
+.status-table {
+  .status {
+    height: 100px;
+    vertical-align: middle;
+    font-size: 30px;
+    color: white;
+
+    &.code-green {
+      background-color: #0F7F12;
+    }
+
+    &.code-yellow {
+      background-color: #FDA428;
+    }
+
+    &.code-red {
+      background-color: #FC0D1B;
+      color: black;
+      .pulse
+    }
+  }
+}
+
+.creep-info {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  padding: 10px 5px;
+  border: 1px solid rgba(220,220,220,0.5);
+}

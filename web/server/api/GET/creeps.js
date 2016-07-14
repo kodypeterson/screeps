@@ -21,7 +21,7 @@ module.exports = function(req, res) {
         job.creeps.forEach(function(name) {
           if (creeps.data[name]) {
             creeps.data[name].job = job;
-            if (job.params && job.params.structure) {
+            if (job.params && typeof job.params.structure === "string") {
               var type = 'N/A';
               for (var i in cache.data.structures.data) {
                 if (i.indexOf('_details') === -1 && cache.data.structures.data[i].indexOf(job.params.structure) > -1) {
@@ -34,7 +34,7 @@ module.exports = function(req, res) {
               }
             }
 
-            if (job.params && job.params.site) {
+            if (job.params && typeof job.params.site === "string") {
               var type = 'N/A';
               for (var i in cache.data.sites.data) {
                 if (cache.data.sites.data[i].indexOf(job.params.site) > -1) {
@@ -62,7 +62,7 @@ module.exports = function(req, res) {
       }
       if (creep.role === 'builder') {
         creep.icon = 'gavel';
-        if (!creep.job.site) {
+        if (!creep.job || !creep.job.params.site) {
           creep.job = {
             params: {
               site: {

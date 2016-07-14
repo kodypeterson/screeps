@@ -22,6 +22,9 @@ namespace screeps.loading {
                         $rootScope.selectedRoomID = rooms[0];
                         $rootScope.rooms = rooms;
                         var states = $state.get();
+                        if (!$stateParams.redir) {
+                            $stateParams.redir = '/dashboard/';
+                        }
                         states.forEach(function(state) {
                             if (state.url === $stateParams.redir) {
                                 $state.go(state.name);

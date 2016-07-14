@@ -15,6 +15,34 @@ module.exports = function(req, res) {
 
   Promise.all(promises).spread(function(room, time) {
     var spawnQueueCount = 0;
+    var code = 'green';
+    var status = 'All is Normal!';
+
+    var totalStorageCapacity = 0;
+    var totalStoredEnergy = 0;
+    var storageCount = 0;
+    var storageTypes = [];
+    if (!room.data.cache.structures.data.storage && !room.data.cache.structures.data.container) {
+      storageTypes.push('extension');
+      storageTypes.push('spawn');
+    } else {
+      storageTypes.push('storage');
+      storageTypes.push('container');
+    }
+    storageTypes.forEach(function(type) {
+      for (var id in room.data.cache.structures.data[type + '_details']) {
+        var cont = room.data.cache.structures.data[type + '_details'][id];
+        totalStorageCapacity += cont.capacity;
+        totalStoredEnergy += cont.store.energy;
+        storageCount++;
+      }
+    });
+
+    if (totalStoredEnergy < totalStorageCapacity/(2 * storageCount)) {
+      code = 'yellow';
+      status = 'Energy Storage Low!';
+    }
+
     room.data.queues.creep.forEach(function(queue) {
       spawnQueueCount += queue.length;
     });
@@ -25,7 +53,11 @@ module.exports = function(req, res) {
       jobCount: Object.keys(room.data.jobs.list).length,
       emptyRoom: room.data.emptyRoom,
       emptyRoomSpawned: room.data.spawnedEmptyRoom,
-      spawnQueueCount: spawnQueueCount
+      spawnQueueCount: spawnQueueCount,
+      totalStoredEnergy: totalStoredEnergy,
+      totalStorageCapacity: totalStorageCapacity,
+      code: code,
+      status: status
     };
     res.send(roomData);
   })

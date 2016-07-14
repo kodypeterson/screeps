@@ -21,18 +21,6 @@ module.exports = function(room) {
             }
         }
 
-        var towers = structures[STRUCTURE_TOWER];
-        if (towers) {
-            for (var i = 0; i < towers.length; i++) {
-                var tower = Game.getObjectById(towers[i]);
-                if (!tower) {
-                    require('helper_refreshStructureCache')(room);
-                } else if (tower.energy !== tower.energyCapacity) {
-                    return tower;
-                }
-            }
-        }
-
         var containers = structures[STRUCTURE_CONTAINER];
         if (containers) {
             for (var i = 0; i < containers.length; i++) {
@@ -53,6 +41,18 @@ module.exports = function(room) {
                     require('helper_refreshStructureCache')(room);
                 } else if (_.sum(storage.store) !== storage.storeCapacity) {
                     return storage;
+                }
+            }
+        }
+
+        var towers = structures[STRUCTURE_TOWER];
+        if (towers) {
+            for (var i = 0; i < towers.length; i++) {
+                var tower = Game.getObjectById(towers[i]);
+                if (!tower) {
+                    require('helper_refreshStructureCache')(room);
+                } else if (tower.energy !== tower.energyCapacity) {
+                    return tower;
                 }
             }
         }

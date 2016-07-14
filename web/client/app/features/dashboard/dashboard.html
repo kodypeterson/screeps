@@ -7,36 +7,71 @@
                 Creep Overview
                 <span class="pull-right"><small>{{DashboardControllerVM.room.spawnQueueCount}} Creeps In Queue</small></span>
             </div>
-            <table class="table">
-                <tr ng-if="activePipelines.length === 0">
-                    <td class="text-center"><em class="text-muted">No active pipeline executions</em></td>
-                </tr>
-                <tr ng-repeat="creep in DashboardControllerVM.creeps">
-                    <td>
-                        <a ui-sref="pipeline-execution-details({id: pe.id})">{{creep.role}} » #{{creep.id}}</a>
-                        <div class="status-bulb" ng-class="{active: (creep.job) && !creep.holdStatus, waiting: creep.holdStatus, inactive: !creep.job}"><i class="fa fa-{{creep.icon}}" ng-if="creep.icon"></i></div>
-                        <br><small class="text-muted"></small>
-                        <small class="text-muted">
-                            <span ng-if="creep.job && creep.role === 'miner'">Mining...</span>
 
-                            <span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'pickup'">Picking Up Resource...</span>
-                            <span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'dropoff'">Dropping Off Resource...</span>
+            <div ng-repeat="creep in DashboardControllerVM.creeps" class="creep-info">
+                <a ui-sref="pipeline-execution-details({id: pe.id})">{{creep.role}}<br><small>#{{creep.id}}</small></a>
+                <br><small class="text-muted"></small>
+                <div class="status-bulb" ng-class="{active: (creep.job) && !creep.holdStatus, waiting: creep.holdStatus, inactive: !creep.job}"><i class="fa fa-{{creep.icon}}" ng-if="creep.icon"></i></div>
+                <small class="text-muted">
+                    <span ng-if="creep.job && creep.role === 'miner'">Mining...</span>
 
-                            <span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type !== 'controller'">Building {{creep.job.params.site.type}}...</span>
-                            <span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type === 'controller'">Progressing {{creep.job.params.site.type}}...</span>
+                    <span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'pickup'">Picking Up Resource...</span>
+                    <span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'dropoff'">Dropping Off Resource...</span>
 
-                            <span ng-if="creep.job && creep.role === 'healer'">Repairing {{creep.job.params.structure.type}}...</span>
+                    <span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type !== 'controller' && !creep.holdStatus">Building {{creep.job.params.site.type}}...</span>
+                    <span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type === 'controller' && !creep.holdStatus">Progressing {{creep.job.params.site.type}}...</span>
 
-                            <span ng-if="!creep.job">Waiting For Work...</span>
-                            <span ng-if="creep.holdStatus">{{creep.holdStatus}}...</span>
-                        </small>
-                    </td>
-                </tr>
-            </table>
+                    <span ng-if="creep.job && creep.role === 'healer' && !creep.holdStatus">Repairing {{creep.job.params.structure.type}}...</span>
+
+                    <span ng-if="!creep.job">Waiting For Work...</span>
+                    <span ng-if="creep.holdStatus">{{creep.holdStatus}}...</span>
+                </small>
+            </div>
+
+            <!--<table class="table">-->
+                <!--<tr ng-if="activePipelines.length === 0">-->
+                    <!--<td class="text-center"><em class="text-muted">No active pipeline executions</em></td>-->
+                <!--</tr>-->
+                <!--<tr ng-repeat="creep in DashboardControllerVM.creeps">-->
+                    <!--<td>-->
+                        <!--<a ui-sref="pipeline-execution-details({id: pe.id})">{{creep.role}} » #{{creep.id}}</a>-->
+                        <!--<div class="status-bulb" ng-class="{active: (creep.job) && !creep.holdStatus, waiting: creep.holdStatus, inactive: !creep.job}"><i class="fa fa-{{creep.icon}}" ng-if="creep.icon"></i></div>-->
+                        <!--<br><small class="text-muted"></small>-->
+                        <!--<small class="text-muted">-->
+                            <!--<span ng-if="creep.job && creep.role === 'miner'">Mining...</span>-->
+
+                            <!--<span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'pickup'">Picking Up Resource...</span>-->
+                            <!--<span ng-if="creep.job && creep.role === 'pickup' && creep.status === 'dropoff'">Dropping Off Resource...</span>-->
+
+                            <!--<span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type !== 'controller' && !creep.holdStatus">Building {{creep.job.params.site.type}}...</span>-->
+                            <!--<span ng-if="creep.job && creep.role === 'builder' && creep.job.params.site.type === 'controller' && !creep.holdStatus">Progressing {{creep.job.params.site.type}}...</span>-->
+
+                            <!--<span ng-if="creep.job && creep.role === 'healer' && !creep.holdStatus">Repairing {{creep.job.params.structure.type}}...</span>-->
+
+                            <!--<span ng-if="!creep.job">Waiting For Work...</span>-->
+                            <!--<span ng-if="creep.holdStatus">{{creep.holdStatus}}...</span>-->
+                        <!--</small>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
         </div>
     </div>
 
     <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Room Overview
+            </div>
+            <table class="table status-table">
+                <tbody>
+                    <tr>
+                        <td class="text-center status code-{{DashboardControllerVM.room.code}}">
+                            {{DashboardControllerVM.room.status}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 Storage Overview
@@ -48,7 +83,7 @@
                             <div class="storage">
                                 <div class="inventory">
                                     <ul>
-                                        <li ng-repeat="(item,value) in storage.store">
+                                        <li ng-repeat="(item,value) in storage.store" ng-if="value > 0">
                                             <div class="type {{item}}"></div> {{value}} <small>({{(value/storage.holding)*100}}%)</small>
                                         </li>
                                     </ul>

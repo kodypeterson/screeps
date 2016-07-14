@@ -47,7 +47,7 @@ module.exports = function(room) {
     function getJob(creep) {
         var id = creep.name || creep.id;
         if (Jobs.creepJobMap[id] && Jobs.list[Jobs.creepJobMap[id]]) {
-            var job = Jobs.list[Jobs.creepJobMap[id]]
+            var job = Jobs.list[Jobs.creepJobMap[id]];
             if (job.isIdleJob) {
                 var jobId = _getJob(creep);
                 if (!Jobs.list[jobId].isIdleJob) {
