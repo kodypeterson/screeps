@@ -64,7 +64,7 @@ module.exports = function(room) {
             });
         }
     });
-    if (!Cache.get(room, 'structures') || room.memory.refreshStructures || (Game.time - room.memory.lastStructureRefresh) > (ticksToWait * 10)) {
+    if (!Cache.get(room, 'structures') || room.memory.refreshStructures || (Game.time - room.memory.lastStructureRefresh) > (ticksToWait * 2)) {
         delete room.memory.refreshStructures;
         require('../helper/refreshStructureCache')(room);
     }
